@@ -1,4 +1,13 @@
 {
   "version": 2,
-  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
+  "routes": [
+    {
+      "src": "/tesistanNegocios.json",
+      "dest": "/tesistanNegocios.json"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
