@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -424,6 +425,7 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
 }
 
 /* NEGOCIOS JSON STYLES */
+.neg-loading{grid-column:1/-1;text-align:center;padding:48px 20px;font-size:0.95rem;font-weight:700;color:var(--txs);line-height:1.8}
 .neg-stars{font-size:0.85rem;color:var(--or);font-weight:800;display:block;margin-top:4px}
 .neg-stars em{font-style:normal;font-size:0.78rem;color:var(--txs);margin-left:3px}
 .neg-card-mid{padding:8px 14px 4px;border-top:1px solid rgba(0,0,0,0.05)}
@@ -902,18 +904,36 @@ const giroLbl = id => (GIROS.find(g=>g.id===id)||{label:'Otro'}).label;
 let NEGOCIOS_JSON = [];
 
 async function cargarNegocios() {
-  try {
-    const res = await fetch('/tesistanNegocios.json');
-    if (!res.ok) throw new Error('No se pudo cargar el directorio');
-    NEGOCIOS_JSON = await res.json();
-    updateDirStats();
-    if (document.getElementById('p-vecinos').classList.contains('active')) {
-      buildGirosFilter();
-      renderNegocios();
-    }
-  } catch (e) {
-    console.error('Error cargando negocios:', e);
-    showToast('⚠️ No se pudo cargar el directorio', '#b84c2e');
+  // Mostrar spinner en el grid si la página vecinos está activa
+  const grid = document.getElementById('neg-grid');
+  if (grid) grid.innerHTML = '<div class="neg-loading">⏳ Cargando directorio…</div>';
+
+  // Intentar con /tesistanNegocios.json (raíz del sitio en Vercel)
+  const urls = ['/tesistanNegocios.json', './tesistanNegocios.json'];
+  let loaded = false;
+
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (!Array.isArray(data)) continue;
+      NEGOCIOS_JSON = data;
+      loaded = true;
+      break;
+    } catch (e) { continue; }
+  }
+
+  if (!loaded) {
+    if (grid) grid.innerHTML = '<div class="neg-loading" style="color:#b84c2e">⚠️ No se pudo cargar el directorio.<br><small>Verifica que tesistanNegocios.json esté en la raíz del proyecto.</small></div>';
+    console.error('No se pudo cargar tesistanNegocios.json');
+    return;
+  }
+
+  updateDirStats();
+  if (document.getElementById('p-vecinos').classList.contains('active')) {
+    buildGirosFilter();
+    renderNegocios();
   }
 }
 
@@ -928,7 +948,10 @@ function goTo(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('p-'+page).classList.add('active');
   window.scrollTo(0,0);
-  if(page==='vecinos'){buildGirosFilter();renderNegocios()}
+  if(page==='vecinos'){
+    if(NEGOCIOS_JSON.length===0){cargarNegocios();}
+    else{buildGirosFilter();renderNegocios();}
+  }
   if(page==='negocios'){buildGiroSelect()}
   if(page==='home'){updateDirStats()}
 }
