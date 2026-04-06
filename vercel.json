@@ -1,4 +1,191 @@
-{
-  "version": 2,
-  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
-}
+[
+  {
+    "nombre": "El Paso del Coyote",
+    "direccion": "C. Lucio Blanco, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1529 7088",
+    "categoria": "restaurants",
+    "rating": 4.6
+  },
+  {
+    "nombre": "Restaurante Campestre",
+    "direccion": "Carr. a Colotlán 2592, Hacienda Las Palomas, La Magdalena, 45200 Tesistán, Jal.",
+    "telefono": "",
+    "categoria": "restaurants",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Los Muchachos de Zapopan Menuderia Tesistán",
+    "direccion": "Casi esquina, Zaragoza, Puebla 63b, 45200 Zapopan, Jal.",
+    "telefono": "+52 33 4791 4101",
+    "categoria": "restaurants",
+    "rating": 4.8
+  },
+  {
+    "nombre": "El cabrito",
+    "direccion": "Hidalgo 220a, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1377 7842",
+    "categoria": "restaurants",
+    "rating": 4.4
+  },
+  {
+    "nombre": "La Gloria",
+    "direccion": "Hidalgo 175, 45200 Zapopan, Jal.",
+    "telefono": "+52 33 3897 2276",
+    "categoria": "restaurants",
+    "rating": 4.2
+  },
+  {
+    "nombre": "Mariscos El Líder",
+    "direccion": "C. Lucio Blanco 306, Roberto Orozco, 45100 Tesistán, Jal.",
+    "telefono": "+52 33 2750 5287",
+    "categoria": "restaurants",
+    "rating": 4.9
+  },
+  {
+    "nombre": "Taquería Morales",
+    "direccion": "Av San Mateo 809, Parques de Tesistán, 45200 Zapopan, Jal.",
+    "telefono": "+52 33 1741 7470",
+    "categoria": "restaurants",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Restaurante La Terraza",
+    "direccion": "Huerto 2, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1561 6418",
+    "categoria": "restaurants",
+    "rating": 4.2
+  },
+  {
+    "nombre": "Two sushi (Tesistán)",
+    "direccion": "Antiguo Camino a Tesistan 8236, 45200 Zapopan, Jal.",
+    "telefono": "+52 33 4783 8891",
+    "categoria": "Restaurante de sushi",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Los Tablones",
+    "direccion": "Puebla 225-A, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2987 7066",
+    "categoria": "restaurants",
+    "rating": 4.6
+  },
+  {
+    "nombre": "El Sazón",
+    "direccion": "Calle Valle de Tesistan 78a, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2968 8644",
+    "categoria": "restaurants",
+    "rating": 4.6
+  },
+  {
+    "nombre": "El Asadero De Neto",
+    "direccion": "Av San Mateo 1550 a, Parques Tesistan, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1283 5733",
+    "categoria": "restaurants",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Punto 80",
+    "direccion": "C. Fray Junípero Serra 758, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2021 1114",
+    "categoria": "bars",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Birriería La Tapatía",
+    "direccion": "Calle Ramón Corona, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2300 8674",
+    "categoria": "restaurants",
+    "rating": 4.3
+  },
+  {
+    "nombre": "La capital",
+    "direccion": "Av San Mateo 874, Parques de Tesistán, 45200 Zapopan, Jal.",
+    "telefono": "+52 33 4524 2028",
+    "categoria": "restaurants",
+    "rating": 4.3
+  },
+  {
+    "nombre": "Asadas La Vaquita",
+    "direccion": "San Mateo 1755 997-5, Parques Tesistan, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2301 6540",
+    "categoria": "restaurants",
+    "rating": 4.4
+  },
+  {
+    "nombre": "Cenaduria Martinez",
+    "direccion": "San Francisco 254, Haciendas de Zapopan, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2780 5182",
+    "categoria": "restaurants",
+    "rating": 4.6
+  },
+  {
+    "nombre": "MARISCOS \"EL GUAYABO”",
+    "direccion": "C. Zaragoza 77, Tesistan, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 2158 7201",
+    "categoria": "restaurants",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Cantaritos Ranchito",
+    "direccion": "Av. Juan Manuel Ruvalcaba 110, Santa Lucía, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1708 1349",
+    "categoria": "restaurants",
+    "rating": 4.4
+  },
+  {
+    "nombre": "Mariscos Don Gau",
+    "direccion": "Fray Elías 405, Roberto Orozco, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1953 8927",
+    "categoria": "restaurants",
+    "rating": 4.8
+  },
+  {
+    "nombre": "La esquina del sabor",
+    "direccion": "Av San Mateo 1408-B, Parques Tesistan, 45200 San Francisco Tesistán, Jal.",
+    "telefono": "+52 33 1834 4224",
+    "categoria": "restaurants",
+    "rating": 4.5
+  },
+  {
+    "nombre": "Valentina's Restaurant",
+    "direccion": "Bajío 110, 45100 Tesistán, Jal.",
+    "telefono": "+52 33 4341 0382",
+    "categoria": "restaurants",
+    "rating": 4
+  },
+  {
+    "nombre": "100% Res Tesistan 1",
+    "direccion": "C. Jalisco, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 3105 6608",
+    "categoria": "Hamburguesería",
+    "rating": 4
+  },
+  {
+    "nombre": "Maresito",
+    "direccion": "Av San Mateo 896B, Parques de Tesistán, 45200 Zapopan, Jal.",
+    "telefono": "+52 33 3270 0803",
+    "categoria": "restaurants",
+    "rating": 4.1
+  },
+  {
+    "nombre": "Tacko Rock",
+    "direccion": "Calle Puente Chico 249, La Magdalena, 45200 Tesistán, Jal.",
+    "telefono": "",
+    "categoria": "restaurants",
+    "rating": 4.7
+  },
+  {
+    "nombre": "La Patrona",
+    "direccion": "Don Pedro Vázquez Cisneros 203, Las Agujas, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 3007 2538",
+    "categoria": "restaurants",
+    "rating": 4.3
+  },
+  {
+    "nombre": "Tacos Arandas",
+    "direccion": "C. Jalisco 156, 45200 Tesistán, Jal.",
+    "telefono": "+52 33 1877 5775",
+    "categoria": "restaurants",
+    "rating": 4.3
+  }
+]
