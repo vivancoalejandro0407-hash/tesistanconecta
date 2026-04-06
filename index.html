@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -783,7 +782,7 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
       <div class="results-count" id="results-count"></div>
       <div style="font-size:0.73rem;color:var(--txs);font-weight:700">Toca una tarjeta para ver detalles</div>
     </div>
-    <div id="negocios" style="display:none"></div>
+    <div id="negocios"></div>
     <div class="neg-grid" id="neg-grid"></div>
     <div class="empty-state" id="empty-state">
       <div class="empty-ico">🔍</div>
@@ -904,32 +903,18 @@ const giroLbl = id => (GIROS.find(g=>g.id===id)||{label:'Otro'}).label;
 let NEGOCIOS_JSON = [];
 
 async function cargarNegocios() {
-  // Mostrar spinner en el grid si la página vecinos está activa
-  const grid = document.getElementById('neg-grid');
-  if (grid) grid.innerHTML = '<div class="neg-loading">⏳ Cargando directorio…</div>';
-
-  // Intentar con /tesistanNegocios.json (raíz del sitio en Vercel)
-  const urls = ['/tesistanNegocios.json', './tesistanNegocios.json'];
-  let loaded = false;
-
-  for (const url of urls) {
-    try {
-      const res = await fetch(url);
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (!Array.isArray(data)) continue;
-      NEGOCIOS_JSON = data;
-      loaded = true;
-      break;
-    } catch (e) { continue; }
-  }
-
-  if (!loaded) {
-    if (grid) grid.innerHTML = '<div class="neg-loading" style="color:#b84c2e">⚠️ No se pudo cargar el directorio.<br><small>Verifica que tesistanNegocios.json esté en la raíz del proyecto.</small></div>';
-    console.error('No se pudo cargar tesistanNegocios.json');
+  try {
+    const res = await fetch('/tesistanNegocios.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error('JSON no es un arreglo');
+    NEGOCIOS_JSON = data;
+  } catch (e) {
+    console.error('Error al cargar tesistanNegocios.json:', e);
+    const grid = document.getElementById('neg-grid');
+    if (grid) grid.innerHTML = '<div class="neg-loading neg-error">⚠️ No se pudo cargar el directorio.<br><small>Asegúrate de que <strong>tesistanNegocios.json</strong> esté en la raíz de tu repositorio.</small></div>';
     return;
   }
-
   updateDirStats();
   if (document.getElementById('p-vecinos').classList.contains('active')) {
     buildGirosFilter();
@@ -937,31 +922,34 @@ async function cargarNegocios() {
   }
 }
 
-function getNegocios() {
-  return NEGOCIOS_JSON;
-}
-
+function getNegocios() { return NEGOCIOS_JSON; }
 
 /* ═══ NAVEGACIÓN ═══ */
-let activeGiro='all';
-function goTo(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('p-'+page).classList.add('active');
-  window.scrollTo(0,0);
-  if(page==='vecinos'){
-    if(NEGOCIOS_JSON.length===0){cargarNegocios();}
-    else{buildGirosFilter();renderNegocios();}
+let activeGiro = 'all';
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('p-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'vecinos') {
+    if (NEGOCIOS_JSON.length === 0) {
+      const grid = document.getElementById('neg-grid');
+      if (grid) grid.innerHTML = '<div class="neg-loading">⏳ Cargando directorio…</div>';
+      cargarNegocios();
+    } else {
+      buildGirosFilter();
+      renderNegocios();
+    }
   }
-  if(page==='negocios'){buildGiroSelect()}
-  if(page==='home'){updateDirStats()}
+  if (page === 'negocios') { buildGiroSelect(); }
+  if (page === 'home') { updateDirStats(); }
 }
 
 /* ═══ HOME STATS ═══ */
-function updateDirStats(){
-  const all=getNegocios();
-  const cats=new Set(all.map(n=>n.categoria).filter(Boolean)).size;
-  animVal('ds-negs',all.length);
-  animVal('ds-giros',cats);
+function updateDirStats() {
+  const all = getNegocios();
+  const cats = new Set(all.map(n => n.categoria).filter(Boolean)).size;
+  animVal('ds-negs', all.length);
+  animVal('ds-giros', cats);
 }
 
 /* ═══ HERO ANIM NUMBERS ═══ */
@@ -985,87 +973,82 @@ function tick(){
 tick();setInterval(tick,1000);
 
 /* ═══ VECINOS: GIROS FILTER ═══ */
-function buildGirosFilter(){
-  const wrap=document.getElementById('giros-filter');
-  const all=getNegocios();
-  const cats=[...new Set(all.map(n=>n.categoria).filter(Boolean))].sort();
-  const opts=[{id:'all',label:'🗂 Todos'},...cats.map(c=>({id:c,label:'🍽 '+c}))];
-  wrap.innerHTML=opts.map(g=>`<button class="g-chip${activeGiro===g.id?' on':''}" onclick="filterGiro('${g.id}')">${g.label}</button>`).join('');
+function buildGirosFilter() {
+  const wrap = document.getElementById('giros-filter');
+  const cats = [...new Set(getNegocios().map(n => n.categoria).filter(Boolean))].sort();
+  const opts = ['all', ...cats];
+  wrap.innerHTML = opts.map(c => {
+    const label = c === 'all' ? '🗂 Todos' : c;
+    return `<button class="g-chip${activeGiro === c ? ' on' : ''}" onclick="filterGiro('${c.replace(/'/g,"\\'")}'">${label}</button>`;
+  }).join('');
 }
-function filterGiro(g){activeGiro=g;buildGirosFilter();renderNegocios()}
+function filterGiro(g) { activeGiro = g; buildGirosFilter(); renderNegocios(); }
 
 /* ═══ VECINOS: RENDER ═══ */
-function renderNegocios(){
-  const q=(document.getElementById('search-input')?.value||'').toLowerCase().trim();
-  let list=getNegocios();
-  if(activeGiro!=='all')list=list.filter(n=>n.categoria&&n.categoria.toLowerCase().includes(activeGiro));
-  if(q)list=list.filter(n=>(n.nombre+n.direccion+n.categoria).toLowerCase().includes(q));
-  const count=document.getElementById('results-count');
-  const grid=document.getElementById('neg-grid');
-  const empty=document.getElementById('empty-state');
-  if(!list.length){grid.innerHTML='';empty.classList.add('show');count.innerHTML='';return}
+function renderNegocios() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+  let list = getNegocios();
+  if (activeGiro !== 'all') list = list.filter(n => n.categoria === activeGiro);
+  if (q) list = list.filter(n => (n.nombre + ' ' + n.direccion + ' ' + n.categoria).toLowerCase().includes(q));
+
+  const count = document.getElementById('results-count');
+  const grid  = document.getElementById('neg-grid');
+  const empty = document.getElementById('empty-state');
+
+  if (!list.length) {
+    grid.innerHTML = '';
+    empty.classList.add('show');
+    count.innerHTML = '';
+    return;
+  }
   empty.classList.remove('show');
-  count.innerHTML=`<strong>${list.length}</strong> negocio${list.length!==1?'s':''} encontrado${list.length!==1?'s':''}`;
-  grid.innerHTML='';
-  document.getElementById('negocios').innerHTML='';
-  renderNegociosCards(list);
-}
-
-function starsHTML(rating){
-  if(!rating) return '';
-  const full=Math.floor(rating);
-  const half=rating-full>=0.5?1:0;
-  const empty=5-full-half;
-  return'<span class="neg-stars">'+'★'.repeat(full)+(half?'½':'')+'☆'.repeat(empty)+` <em>${rating.toFixed(1)}</em></span>`;
-}
-
-function renderNegociosCards(list){
-  const grid=document.getElementById('neg-grid');
-  const negsDiv=document.getElementById('negocios');
-  grid.innerHTML=list.map((n,i)=>{
-    const tel=(n.telefono||'').replace(/\D/g,'');
-    return`<div class="neg-card" style="animation-delay:${i*30}ms">
+  count.innerHTML = `<strong>${list.length}</strong> negocio${list.length !== 1 ? 's' : ''} encontrado${list.length !== 1 ? 's' : ''}`;
+  grid.innerHTML = list.map((n, i) => {
+    const tel = (n.telefono || '').replace(/\D/g, '');
+    return `<div class="neg-card" style="animation-delay:${i * 30}ms">
       <div class="neg-card-top">
         <div class="neg-avatar">🏪</div>
         <div class="neg-info">
           <div class="neg-name">${esc(n.nombre)}</div>
-          <div class="neg-giro-tag">${esc(n.categoria||'')}</div>
+          <div class="neg-giro-tag">${esc(n.categoria || '')}</div>
           ${starsHTML(n.rating)}
         </div>
       </div>
       <div class="neg-card-mid">
-        ${n.direccion?`<p class="neg-dir">📍 ${esc(n.direccion)}</p>`:''}
-        ${tel?`<p class="neg-tel-txt">📞 ${esc(n.telefono)}</p>`:''}
+        ${n.direccion ? `<p class="neg-dir">📍 ${esc(n.direccion)}</p>` : ''}
+        ${n.telefono  ? `<p class="neg-tel-txt">📞 ${esc(n.telefono)}</p>` : ''}
       </div>
       <div class="neg-card-bot">
-        ${tel?`<a class="nbt nbt-tel" href="tel:+52${tel}" onclick="event.stopPropagation()">📞 Llamar</a>`:''}
+        ${tel ? `<a class="nbt nbt-tel" href="tel:+52${tel}" onclick="event.stopPropagation()">📞 Llamar</a>` : ''}
       </div>
-    </div>`}).join('');
-  // También pintar en #negocios
-  negsDiv.innerHTML=list.map(n=>`
-    <div class="neg-item">
-      <h3>${esc(n.nombre)}</h3>
-      <p>📍 ${esc(n.direccion||'Sin dirección')}</p>
-      <p>📞 ${esc(n.telefono||'Sin teléfono')}</p>
-      ${starsHTML(n.rating)}
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+function starsHTML(rating) {
+  if (!rating) return '';
+  const full  = Math.floor(rating);
+  const half  = (rating - full) >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  return `<span class="neg-stars">${'★'.repeat(full)}${half ? '½' : ''}${'☆'.repeat(empty)} <em>${rating.toFixed(1)}</em></span>`;
 }
 
 /* ═══ MODAL ═══ */
-function openModal(nombre){
-  const n=getNegocios().find(x=>x.nombre===nombre);if(!n)return;
-  const tel=(n.telefono||'').replace(/\D/g,'');
-  document.getElementById('modal-body').innerHTML=`
+function openModal(nombre) {
+  const n = getNegocios().find(x => x.nombre === nombre);
+  if (!n) return;
+  const tel = (n.telefono || '').replace(/\D/g, '');
+  document.getElementById('modal-body').innerHTML = `
     <div style="font-size:2.4rem;margin-bottom:12px">🏪</div>
     <h3>${esc(n.nombre)}</h3>
-    <div class="modal-giro">${esc(n.categoria||'')}</div>
+    <div class="modal-giro">${esc(n.categoria || '')}</div>
     <div class="modal-info">
-      ${n.telefono?`<div class="modal-row">📞 ${esc(n.telefono)}</div>`:''}
-      ${n.direccion?`<div class="modal-row">📍 ${esc(n.direccion)}</div>`:''}
-      ${n.rating?`<div class="modal-row">⭐ Rating: ${n.rating.toFixed(1)}</div>`:''}
+      ${n.telefono  ? `<div class="modal-row">📞 ${esc(n.telefono)}</div>`  : ''}
+      ${n.direccion ? `<div class="modal-row">📍 ${esc(n.direccion)}</div>` : ''}
+      ${n.rating    ? `<div class="modal-row">${starsHTML(n.rating)}</div>` : ''}
     </div>
     <div class="modal-actions">
-      ${tel?`<a class="m-tel" href="tel:+${tel}">📞 Llamar</a>`:''}
+      ${tel ? `<a class="m-tel" href="tel:+52${tel}">📞 Llamar</a>` : ''}
     </div>`;
   document.getElementById('modal-bg').classList.add('open');
 }
