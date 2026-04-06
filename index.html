@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -423,6 +422,15 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
   .hero-btns{flex-direction:column;align-items:center}
   .btn-wa,.btn-dir{width:100%;max-width:320px;justify-content:center}
 }
+
+/* NEGOCIOS JSON STYLES */
+.neg-stars{font-size:0.85rem;color:var(--or);font-weight:800;display:block;margin-top:4px}
+.neg-stars em{font-style:normal;font-size:0.78rem;color:var(--txs);margin-left:3px}
+.neg-card-mid{padding:8px 14px 4px;border-top:1px solid rgba(0,0,0,0.05)}
+.neg-dir,.neg-tel-txt{font-size:0.79rem;color:var(--txs);font-weight:700;margin:3px 0;line-height:1.4}
+.neg-item{background:var(--wh);border-radius:14px;padding:18px 20px;border:1.5px solid #d6e8dc;margin-bottom:10px}
+.neg-item h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--v);font-weight:900;margin-bottom:6px}
+.neg-item p{font-size:0.83rem;color:var(--txs);font-weight:700;margin:2px 0}
 </style>
 </head>
 <body>
@@ -773,6 +781,7 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
       <div class="results-count" id="results-count"></div>
       <div style="font-size:0.73rem;color:var(--txs);font-weight:700">Toca una tarjeta para ver detalles</div>
     </div>
+    <div id="negocios" style="display:none"></div>
     <div class="neg-grid" id="neg-grid"></div>
     <div class="empty-state" id="empty-state">
       <div class="empty-ico">🔍</div>
@@ -888,25 +897,28 @@ const GIROS=[
 const giroIco = id => (GIROS.find(g=>g.id===id)||{label:'📦 ?'}).label.split(' ')[0];
 const giroLbl = id => (GIROS.find(g=>g.id===id)||{label:'Otro'}).label;
 
-/* ═══ SEED DATA ═══ */
-const SEED=[
-  {id:'s1',nombre:'Tortillería Doña Celia',giro:'tortilleria',desc:'Tortillas de maíz azul y blanco. Tlayudas y tostadas.',tel:'3312345678',wa:'3312345678',col:'Centro',horario:'Lun–Sáb 6am–2pm',ts:Date.now()-86400000},
-  {id:'s2',nombre:'Carnicería El Corral',giro:'carniceria',desc:'Carne de res y cerdo. Chorizo artesanal. Domicilio desde $200.',tel:'3398765432',wa:'3398765432',col:'Barrio del Refugio',horario:'Lun–Dom 7am–3pm',ts:Date.now()-72000000},
-  {id:'s3',nombre:'Abarrotes La Esperanza',giro:'abarrotes',desc:'Abarrotes, frutas, verduras y artículos de limpieza. Refresco frío.',tel:'3387654321',wa:'',col:'Huizachera',horario:'8am–10pm diario',ts:Date.now()-60000000},
-  {id:'s4',nombre:'Farmacia San Miguel',giro:'farmacia',desc:'Medicamentos genéricos y de marca. Consulta gratis 4–8pm.',tel:'3311223344',wa:'3311223344',col:'Centro',horario:'8am–10pm',ts:Date.now()-50000000},
-  {id:'s5',nombre:'Estética Glamour',giro:'belleza',desc:'Cortes, tintes, alisados, manicure y pedicure. Citas por WhatsApp.',tel:'3344556677',wa:'3344556677',col:'Lomas del Rey',horario:'Mar–Dom 9am–7pm',ts:Date.now()-40000000},
-  {id:'s6',nombre:'Taller Mecánico Los Reyes',giro:'taller',desc:'Servicio general, frenos, suspensión y eléctrico. 10 años de experiencia.',tel:'3355443322',wa:'3355443322',col:'Carretera Tesistán',horario:'Lun–Sáb 8am–6pm',ts:Date.now()-30000000},
-  {id:'s7',nombre:'Panadería El Trigal',giro:'panaderia',desc:'Pan de dulce, bolillos y pasteles por pedido. Tamales los fines de semana.',tel:'3366778899',wa:'',col:'Centro',horario:'6am–8pm diario',ts:Date.now()-20000000},
-  {id:'s8',nombre:'Ferretería El Maestro',giro:'ferreteria',desc:'Materiales de construcción, herramientas, pinturas. Asesoría gratis.',tel:'3377889900',wa:'3377889900',col:'Avenida Principal',horario:'Lun–Sáb 8am–7pm',ts:Date.now()-10000000},
-];
 
-/* ═══ STORAGE ═══ */
-function getNegocios(){
-  try{
-    const saved=JSON.parse(localStorage.getItem('tc_negs')||'[]');
-    const ids=saved.map(n=>n.id);
-    return [...SEED.filter(s=>!ids.includes(s.id)),...saved];
-  }catch(e){return[...SEED]}
+/* ═══ DATOS DINÁMICOS ═══ */
+let NEGOCIOS_JSON = [];
+
+async function cargarNegocios() {
+  try {
+    const res = await fetch('/tesistanNegocios.json');
+    if (!res.ok) throw new Error('No se pudo cargar el directorio');
+    NEGOCIOS_JSON = await res.json();
+    updateDirStats();
+    if (document.getElementById('p-vecinos').classList.contains('active')) {
+      buildGirosFilter();
+      renderNegocios();
+    }
+  } catch (e) {
+    console.error('Error cargando negocios:', e);
+    showToast('⚠️ No se pudo cargar el directorio', '#b84c2e');
+  }
+}
+
+function getNegocios() {
+  return NEGOCIOS_JSON;
 }
 
 
@@ -924,9 +936,9 @@ function goTo(page){
 /* ═══ HOME STATS ═══ */
 function updateDirStats(){
   const all=getNegocios();
-  const giros=new Set(all.map(n=>n.giro)).size;
+  const cats=new Set(all.map(n=>n.categoria).filter(Boolean)).size;
   animVal('ds-negs',all.length);
-  animVal('ds-giros',giros);
+  animVal('ds-giros',cats);
 }
 
 /* ═══ HERO ANIM NUMBERS ═══ */
@@ -953,9 +965,9 @@ tick();setInterval(tick,1000);
 function buildGirosFilter(){
   const wrap=document.getElementById('giros-filter');
   const all=getNegocios();
-  const used=new Set(all.map(n=>n.giro));
-  const opts=[{id:'all',label:'🗂 Todos'},...GIROS.filter(g=>used.has(g.id))];
-  wrap.innerHTML=opts.map(g=>`<button class="g-chip${activeGiro===g.id?' on':''}" onclick="filterGiro('${g.id}')">${g.label||g.id}</button>`).join('');
+  const cats=[...new Set(all.map(n=>n.categoria).filter(Boolean))].sort();
+  const opts=[{id:'all',label:'🗂 Todos'},...cats.map(c=>({id:c,label:'🍽 '+c}))];
+  wrap.innerHTML=opts.map(g=>`<button class="g-chip${activeGiro===g.id?' on':''}" onclick="filterGiro('${g.id}')">${g.label}</button>`).join('');
 }
 function filterGiro(g){activeGiro=g;buildGirosFilter();renderNegocios()}
 
@@ -963,53 +975,74 @@ function filterGiro(g){activeGiro=g;buildGirosFilter();renderNegocios()}
 function renderNegocios(){
   const q=(document.getElementById('search-input')?.value||'').toLowerCase().trim();
   let list=getNegocios();
-  if(activeGiro!=='all')list=list.filter(n=>n.giro===activeGiro);
-  if(q)list=list.filter(n=>(n.nombre+n.desc+n.col+n.giro).toLowerCase().includes(q));
-  list.sort((a,b)=>b.ts-a.ts);
+  if(activeGiro!=='all')list=list.filter(n=>n.categoria&&n.categoria.toLowerCase().includes(activeGiro));
+  if(q)list=list.filter(n=>(n.nombre+n.direccion+n.categoria).toLowerCase().includes(q));
   const count=document.getElementById('results-count');
   const grid=document.getElementById('neg-grid');
   const empty=document.getElementById('empty-state');
   if(!list.length){grid.innerHTML='';empty.classList.add('show');count.innerHTML='';return}
   empty.classList.remove('show');
   count.innerHTML=`<strong>${list.length}</strong> negocio${list.length!==1?'s':''} encontrado${list.length!==1?'s':''}`;
-  grid.innerHTML=list.map(n=>{
-    const tel=(n.tel||'').replace(/\D/g,'');
-    const wa=(n.wa||'').replace(/\D/g,'');
-    return`<div class="neg-card" onclick="openModal('${n.id}')">
+  grid.innerHTML='';
+  document.getElementById('negocios').innerHTML='';
+  renderNegociosCards(list);
+}
+
+function starsHTML(rating){
+  if(!rating) return '';
+  const full=Math.floor(rating);
+  const half=rating-full>=0.5?1:0;
+  const empty=5-full-half;
+  return'<span class="neg-stars">'+'★'.repeat(full)+(half?'½':'')+'☆'.repeat(empty)+` <em>${rating.toFixed(1)}</em></span>`;
+}
+
+function renderNegociosCards(list){
+  const grid=document.getElementById('neg-grid');
+  const negsDiv=document.getElementById('negocios');
+  grid.innerHTML=list.map((n,i)=>{
+    const tel=(n.telefono||'').replace(/\D/g,'');
+    return`<div class="neg-card" style="animation-delay:${i*30}ms">
       <div class="neg-card-top">
-        <div class="neg-avatar">${giroIco(n.giro)}</div>
+        <div class="neg-avatar">🏪</div>
         <div class="neg-info">
           <div class="neg-name">${esc(n.nombre)}</div>
-          <div class="neg-giro-tag">${giroLbl(n.giro)}</div>
-          <div class="neg-desc">${esc(n.desc).substring(0,85)}${n.desc.length>85?'…':''}</div>
+          <div class="neg-giro-tag">${esc(n.categoria||'')}</div>
+          ${starsHTML(n.rating)}
         </div>
+      </div>
+      <div class="neg-card-mid">
+        ${n.direccion?`<p class="neg-dir">📍 ${esc(n.direccion)}</p>`:''}
+        ${tel?`<p class="neg-tel-txt">📞 ${esc(n.telefono)}</p>`:''}
       </div>
       <div class="neg-card-bot">
         ${tel?`<a class="nbt nbt-tel" href="tel:+52${tel}" onclick="event.stopPropagation()">📞 Llamar</a>`:''}
-        ${wa?`<a class="nbt nbt-wa" href="https://wa.me/52${wa}" target="_blank" rel="noopener" onclick="event.stopPropagation()">💬 WhatsApp</a>`:''}
-        ${n.col?`<div class="neg-col">📍 ${esc(n.col)}</div>`:''}
       </div>
     </div>`}).join('');
+  // También pintar en #negocios
+  negsDiv.innerHTML=list.map(n=>`
+    <div class="neg-item">
+      <h3>${esc(n.nombre)}</h3>
+      <p>📍 ${esc(n.direccion||'Sin dirección')}</p>
+      <p>📞 ${esc(n.telefono||'Sin teléfono')}</p>
+      ${starsHTML(n.rating)}
+    </div>`).join('');
 }
 
 /* ═══ MODAL ═══ */
-function openModal(id){
-  const n=getNegocios().find(x=>x.id===id);if(!n)return;
-  const tel=(n.tel||'').replace(/\D/g,'');
-  const wa=(n.wa||'').replace(/\D/g,'');
+function openModal(nombre){
+  const n=getNegocios().find(x=>x.nombre===nombre);if(!n)return;
+  const tel=(n.telefono||'').replace(/\D/g,'');
   document.getElementById('modal-body').innerHTML=`
-    <div style="font-size:2.4rem;margin-bottom:12px">${giroIco(n.giro)}</div>
+    <div style="font-size:2.4rem;margin-bottom:12px">🏪</div>
     <h3>${esc(n.nombre)}</h3>
-    <div class="modal-giro">${giroLbl(n.giro)}</div>
-    <div class="modal-desc">${esc(n.desc)||'Sin descripción adicional.'}</div>
+    <div class="modal-giro">${esc(n.categoria||'')}</div>
     <div class="modal-info">
-      ${n.tel?`<div class="modal-row">📞 ${esc(n.tel)}</div>`:''}
-      ${n.col?`<div class="modal-row">📍 ${esc(n.col)}, Tesistán</div>`:''}
-      ${n.horario?`<div class="modal-row">🕐 ${esc(n.horario)}</div>`:''}
+      ${n.telefono?`<div class="modal-row">📞 ${esc(n.telefono)}</div>`:''}
+      ${n.direccion?`<div class="modal-row">📍 ${esc(n.direccion)}</div>`:''}
+      ${n.rating?`<div class="modal-row">⭐ Rating: ${n.rating.toFixed(1)}</div>`:''}
     </div>
     <div class="modal-actions">
-      ${tel?`<a class="m-tel" href="tel:+52${tel}">📞 Llamar</a>`:''}
-      ${wa?`<a class="m-wa" href="https://wa.me/52${wa}" target="_blank" rel="noopener">💬 WhatsApp</a>`:''}
+      ${tel?`<a class="m-tel" href="tel:+${tel}">📞 Llamar</a>`:''}
     </div>`;
   document.getElementById('modal-bg').classList.add('open');
 }
@@ -1067,7 +1100,7 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 /* ═══ INIT ═══ */
 window.onload=function(){
   animVal('n1',30);animVal('n2',500);animVal('n3',100);
-  updateDirStats();
+  cargarNegocios();
 };
 </script>
 </body>
