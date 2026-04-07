@@ -1027,7 +1027,7 @@ async function fetchDetails(neg) {
     if (!r.ok) return neg;
     const d = await r.json();
     if (!d.ok) return neg;
-    const det = { telefono: d.telefono||'', website: d.website||'', horario: d.horario||[], abierto: d.abierto };
+    const det = { telefono: d.telefono || neg.telefono || '', website: d.website || neg.website || '', horario: d.horario?.length ? d.horario : (neg.horario || []), abierto: d.abierto };
     DETAILS_CACHE[neg.place_id] = det;
     return { ...neg, ...det };
   } catch { return neg; }
