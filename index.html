@@ -1021,13 +1021,27 @@ const DETAILS_CACHE = {};
 
 async function fetchDetails(neg) {
   if (!neg.place_id) return neg;
-  if (DETAILS_CACHE[neg.place_id]) return { ...neg, ...DETAILS_CACHE[neg.place_id] };
+  if (DETAILS_CACHE[neg.place_id]) {
+    const c = DETAILS_CACHE[neg.place_id];
+    return {
+      ...neg,
+      telefono: c.telefono || neg.telefono || '',
+      website:  c.website  || neg.website  || '',
+      horario:  c.horario?.length ? c.horario : (neg.horario || []),
+      abierto:  c.abierto
+    };
+  }
   try {
     const r = await fetch(`/api/places?place_id=${encodeURIComponent(neg.place_id)}`);
     if (!r.ok) return neg;
     const d = await r.json();
     if (!d.ok) return neg;
-    const det = { telefono: d.telefono || neg.telefono || '', website: d.website || neg.website || '', horario: d.horario?.length ? d.horario : (neg.horario || []), abierto: d.abierto };
+    const det = {
+      telefono: d.telefono || neg.telefono || '',
+      website:  d.website  || neg.website  || '',
+      horario:  d.horario?.length ? d.horario : (neg.horario || []),
+      abierto:  d.abierto
+    };
     DETAILS_CACHE[neg.place_id] = det;
     return { ...neg, ...det };
   } catch { return neg; }
@@ -1059,13 +1073,10 @@ function goTo(page) {
   document.getElementById('p-' + page).classList.add('active');
   window.scrollTo(0, 0);
   if (page === 'vecinos') {
+    buildGirosFilter();
+    renderNegocios();
     if (NEGOCIOS_JSON.length === 0) {
-      const grid = document.getElementById('neg-grid');
-      if (grid) grid.innerHTML = '<div class="neg-loading">⏳ Cargando directorio…</div>';
       cargarNegocios();
-    } else {
-      buildGirosFilter();
-      renderNegocios();
     }
   }
   if (page === 'negocios') { buildGiroSelect(); }
