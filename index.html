@@ -1183,16 +1183,7 @@ function modalWaBtn(n) {
 
 /* ── Soy el dueño (manda a tu WA 3320658076) ── */
 function buildDuenoURL(n) {
-  var msg = '🌽 *Hola Tesistán Conecta!*
-
-Soy el dueño de este negocio y quiero validar mis datos:
-
-🏪 *Negocio:* ' + n.nombre + '
-📋 *Categoría:* ' + n.categoria + '
-📍 *Dirección:* ' + (n.direccion || 'por confirmar') + '
-📞 *Teléfono:* ' + (n.telefono || 'por agregar') + '
-
-_Confirmo que soy el dueño y quiero aparecer como negocio Verificado ✅_';
+  var msg = '🌽 *Hola Tesistán Conecta!*\n\nSoy el dueño de este negocio y quiero validar mis datos:\n\n🏪 *Negocio:* ' + n.nombre + '\n📋 *Categoría:* ' + n.categoria + '\n📍 *Dirección:* ' + (n.direccion || 'por confirmar') + '\n📞 *Teléfono:* ' + (n.telefono || 'por agregar') + '\n\n_Confirmo que soy el dueño y quiero aparecer como negocio Verificado ✅_';
   return 'https://wa.me/523320658076?text=' + encodeURIComponent(msg);
 }
 function cardDuenoBtn(n) {
