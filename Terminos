@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Términos y Condiciones — Tesistán Conecta</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#060d07;color:rgba(255,255,255,0.82);min-height:100vh;padding:0}
+.top-bar{background:linear-gradient(90deg,#0b1e0e,#16311e);padding:16px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.top-bar a{color:#22c55e;text-decoration:none;font-weight:800;font-size:0.85rem;display:flex;align-items:center;gap:6px}
+.top-bar a:hover{color:#4ade80}
+.top-bar-title{font-family:'Playfair Display',serif;color:#fff;font-size:1rem;font-weight:900}
+.container{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.3);color:#4ade80;font-size:0.72rem;font-weight:900;padding:5px 14px;border-radius:20px;margin-bottom:20px;text-transform:uppercase;letter-spacing:1px}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.4rem);color:#fff;font-weight:900;margin-bottom:10px;line-height:1.15}
+.subtitle{font-size:0.88rem;color:rgba(255,255,255,0.42);margin-bottom:40px;font-weight:600}
+.card{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.08);border-radius:20px;padding:32px;margin-bottom:20px}
+.card h2{font-family:'Playfair Display',serif;font-size:1.1rem;color:#a8f0c0;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card p{font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.75;margin-bottom:12px;font-weight:500}
+.card ul{list-style:none;padding:0}
+.card ul li{font-size:0.83rem;color:rgba(255,255,255,0.48);line-height:1.7;padding:8px 0 8px 16px;border-bottom:1px solid rgba(255,255,255,0.05);position:relative;font-weight:500}
+.card ul li:last-child{border-bottom:none}
+.card ul li::before{content:'·';position:absolute;left:0;color:rgba(255,255,255,0.25)}
+.card ul li strong{color:rgba(255,255,255,0.72);font-weight:700}
+.note{font-size:0.75rem;color:rgba(255,255,255,0.3);font-style:italic;margin-top:16px;font-weight:500}
+footer{text-align:center;padding:24px;font-size:0.74rem;color:rgba(255,255,255,0.2);border-top:1px solid rgba(255,255,255,0.05)}
+footer a{color:#22c55e;text-decoration:none}
+</style>
+</head>
+<body>
+ 
+<div class="top-bar">
+  <a href="/">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Volver al inicio
+  </a>
+  <span style="color:rgba(255,255,255,0.15)">·</span>
+  <span class="top-bar-title">🌽 Tesistán Conecta</span>
+</div>
+ 
+<div class="container">
+  <div class="badge">📋 Documento legal</div>
+  <h1>Términos y Condiciones</h1>
+  <p class="subtitle">Última actualización: 2025 · Tesistán Conecta, Tesistán, Jalisco, México</p>
+ 
+  <div class="card">
+    <h2>🛒 Descripción del servicio</h2>
+    <p>El servicio de Tesistán Conecta consiste en la difusión de contenido promocional en grupos de Facebook y WhatsApp de la comunidad de Tesistán, Jalisco. Al contratar cualquier plan, el cliente acepta los siguientes términos.</p>
+  </div>
+ 
+  <div class="card">
+    <h2>📌 Condiciones del servicio</h2>
+    <ul>
+      <li>El servicio es de <strong>promoción y visibilidad</strong>, no de resultados garantizados. Tesistán Conecta no garantiza ventas, contactos ni ningún resultado comercial específico derivado de las publicaciones realizadas.</li>
+      <li>Los planes son de <strong>renovación mensual</strong>. Puedes cancelar en cualquier momento antes de tu fecha de renovación, sin penalización.</li>
+      <li>La <strong>semana de cortesía</strong> aplica únicamente en el primer período de contratación por negocio.</li>
+      <li>Los <strong>precios de lanzamiento</strong> están sujetos a disponibilidad de cupos y pueden cambiar sin previo aviso una vez agotados.</li>
+      <li>El cliente es responsable de que el contenido compartido sea <strong>verídico, legal</strong> y no infrinja derechos de terceros.</li>
+      <li>Tesistán Conecta se reserva el derecho de <strong>rechazar o suspender</strong> cuentas que incumplan las políticas de las plataformas sociales utilizadas.</li>
+      <li>El servicio <strong>no incluye</strong> administración de redes sociales propias del cliente ni creación de páginas o cuentas.</li>
+    </ul>
+  </div>
+ 
+  <div class="card">
+    <h2>💳 Pagos y cancelaciones</h2>
+    <ul>
+      <li>Los pagos se realizan por adelantado al inicio de cada período mensual.</li>
+      <li>No se realizan reembolsos por períodos ya iniciados.</li>
+      <li>La cancelación debe solicitarse por WhatsApp antes de la fecha de renovación.</li>
+    </ul>
+  </div>
+ 
+  <div class="card">
+    <h2>⚖️ Limitación de responsabilidad</h2>
+    <p>Tesistán Conecta no será responsable por daños directos, indirectos, incidentales o consecuentes derivados del uso o imposibilidad de uso del servicio. La responsabilidad máxima se limita al monto pagado por el cliente en el mes en curso.</p>
+  </div>
+ 
+  <div class="card">
+    <h2>📬 Contacto</h2>
+    <p>Para cualquier duda sobre estos términos, contáctanos por WhatsApp:</p>
+    <ul>
+      <li><a href="https://wa.me/523320658076" style="color:#22c55e;text-decoration:none;font-weight:700">+52 33 2065 8076</a></li>
+    </ul>
+    <p class="note">Estos términos pueden modificarse. Los cambios serán notificados por los canales de contacto disponibles.</p>
+  </div>
+</div>
+ 
+<footer>
+  © 2025 Tesistán Conecta · Tesistán, Jalisco ·
+  <a href="/">Inicio</a> ·
+  <a href="/aviso-privacidad">Aviso de Privacidad</a>
+</footer>
+ 
+</body>
+</html>
