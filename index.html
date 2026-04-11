@@ -1015,18 +1015,77 @@ const NEGOCIOS_BASE = [{"nombre":"El Paso del Coyote","categoria":"🍽️ Resta
 const DETAILS_CACHE = {};
 const GPLACES_KEY = 'AIzaSyCy-xDSAK4QDM28BqYLkDdCumCHEOL6Ouo';
 
-async function fetchDetails(neg) {
-  if (!neg.place_id) return neg;
-  if (DETAILS_CACHE[neg.place_id]) return { ...neg, ...DETAILS_CACHE[neg.place_id] };
+/* ── Busca place_id por nombre+dirección cuando no se tiene ── */
+async function findPlaceId(neg) {
+  const cacheKey = 'find:' + neg.nombre;
+  if (DETAILS_CACHE[cacheKey]) return DETAILS_CACHE[cacheKey];
   try {
-    const r = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(neg.place_id)}&fields=formatted_phone_number,website,opening_hours&key=${GPLACES_KEY}&language=es`);
-    if (!r.ok) return neg;
+    const query = encodeURIComponent(neg.nombre + ' ' + (neg.direccion || 'Tesistán Zapopan Jalisco'));
+    const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id,formatted_phone_number,website,opening_hours&key=${GPLACES_KEY}&language=es`;
+    const r = await fetch(url);
+    if (!r.ok) return null;
     const d = await r.json();
-    if (!d.ok) return neg;
-    const det = { telefono: d.telefono || neg.telefono || '', website: d.website || neg.website || '', horario: d.horario?.length ? d.horario : (neg.horario || []), abierto: d.abierto };
-    DETAILS_CACHE[neg.place_id] = det;
-    return { ...neg, ...det };
-  } catch { return neg; }
+    if (d.status !== 'OK' || !d.candidates?.length) return null;
+    const c = d.candidates[0];
+    const result = {
+      place_id: c.place_id || '',
+      telefono: c.formatted_phone_number || neg.telefono || '',
+      website:  c.website ? (c.website.startsWith('http') ? c.website : 'https://' + c.website) : (neg.website || ''),
+      horario:  c.opening_hours?.weekday_text || (neg.horario || []),
+      abierto:  c.opening_hours?.open_now ?? null
+    };
+    DETAILS_CACHE[cacheKey] = result;
+    return result;
+  } catch { return null; }
+}
+
+/* ── Enriquece un negocio con Place Details ── */
+async function fetchDetails(neg) {
+  /* Si ya tiene place_id, usa Place Details */
+  if (neg.place_id) {
+    if (DETAILS_CACHE[neg.place_id]) {
+      const c = DETAILS_CACHE[neg.place_id];
+      return { ...neg,
+        telefono: c.telefono || neg.telefono || '',
+        website:  c.website  || neg.website  || '',
+        horario:  c.horario?.length ? c.horario : (neg.horario || []),
+        abierto:  c.abierto ?? null
+      };
+    }
+    try {
+      const fields = 'formatted_phone_number,website,opening_hours';
+      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(neg.place_id)}&fields=${fields}&key=${GPLACES_KEY}&language=es`;
+      const r = await fetch(url);
+      if (!r.ok) return neg;
+      const d = await r.json();
+      if (d.status !== 'OK' || !d.result) return neg;
+      const res = d.result;
+      const det = {
+        telefono: res.formatted_phone_number || neg.telefono || '',
+        website:  res.website ? (res.website.startsWith('http') ? res.website : 'https://' + res.website) : (neg.website || ''),
+        horario:  res.opening_hours?.weekday_text?.length ? res.opening_hours.weekday_text : (neg.horario || []),
+        abierto:  res.opening_hours?.open_now ?? null
+      };
+      DETAILS_CACHE[neg.place_id] = det;
+      return { ...neg, ...det };
+    } catch { return neg; }
+  }
+
+  /* Sin place_id: buscar por nombre+dirección */
+  if (neg.telefono) return neg; /* ya tiene teléfono manual, no buscar */
+  const found = await findPlaceId(neg);
+  if (!found) return neg;
+  /* Guardar place_id encontrado para futuras llamadas */
+  if (found.place_id) {
+    DETAILS_CACHE[found.place_id] = found;
+    neg = { ...neg, place_id: found.place_id };
+  }
+  return { ...neg,
+    telefono: found.telefono || neg.telefono || '',
+    website:  found.website  || neg.website  || '',
+    horario:  found.horario?.length ? found.horario : (neg.horario || []),
+    abierto:  found.abierto ?? null
+  };
 }
 
 let NEGOCIOS_JSON = NEGOCIOS_BASE.map(n => ({ ...n }));
@@ -1180,6 +1239,13 @@ function renderNegocios() {
   if (activeGiro !== 'all') list = list.filter(n => n.categoria === activeGiro);
   if (activeSub  !== 'all') list = list.filter(n => n.subcategoria === activeSub);
   if (q) list = list.filter(n => (n.nombre + ' ' + n.direccion + ' ' + n.categoria + ' ' + (n.subcategoria||'')).toLowerCase().includes(q));
+
+  /* Ordenar: primero los que tienen teléfono o conectado, luego el resto */
+  list = list.slice().sort((a, b) => {
+    const scoreA = ((a.telefono||'').replace(/\D/g,'').length > 0 ? 2 : 0) + (a.conectado ? 1 : 0);
+    const scoreB = ((b.telefono||'').replace(/\D/g,'').length > 0 ? 2 : 0) + (b.conectado ? 1 : 0);
+    return scoreB - scoreA;
+  });
 
   const count = document.getElementById('results-count');
   const grid  = document.getElementById('neg-grid');
