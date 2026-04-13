@@ -73,6 +73,18 @@ body::after{
 .m-dueno{display:block;width:100%;text-align:center;padding:10px 0;border-radius:30px;font-weight:900;font-size:0.83rem;text-decoration:none;margin-top:8px;border:2px solid #2e7d4f;color:#2e7d4f;background:#fff}
 .m-dueno:hover{background:#f0fdf4}
 .m-dueno.ya{background:linear-gradient(90deg,#1a6b3c,#22c55e);color:#fff;border-color:transparent;cursor:default}
+
+/* ── Sección Vecinos WhatsApp ── */
+.vecinos-sec{background:linear-gradient(135deg,#0d2b14 0%,#1a4d25 100%);padding:48px 20px;text-align:center;position:relative;z-index:1}
+.vecinos-inner{max-width:560px;margin:auto}
+.vecinos-ico{font-size:2.4rem;margin-bottom:14px}
+.vecinos-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3.5vw,1.9rem);color:#fff;font-weight:900;margin-bottom:10px;line-height:1.2}
+.vecinos-title em{color:#fde68a;font-style:italic}
+.vecinos-sub{font-size:0.9rem;color:rgba(255,255,255,0.62);font-weight:600;line-height:1.65;margin-bottom:28px;max-width:400px;margin-left:auto;margin-right:auto}
+.vecinos-btn{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:15px 32px;border-radius:50px;font-weight:900;font-size:1rem;text-decoration:none;box-shadow:0 6px 24px rgba(37,211,102,0.40);transition:transform .2s,box-shadow .2s;border:2px solid rgba(255,255,255,0.18)}
+.vecinos-btn:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(37,211,102,0.50)}
+.vecinos-btn svg{width:20px;height:20px;fill:#fff;flex-shrink:0}
+.vecinos-note{margin-top:16px;font-size:0.74rem;color:rgba(255,255,255,0.3);font-weight:600}
 /* SPA PAGES */
 .page{display:none;position:relative;z-index:1}
 .page.active{display:block;animation:fadeUp .4s ease both}
@@ -528,7 +540,7 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
   <div class="top-urgency">
     <span>⏳ Precio de lanzamiento — termina en:</span>
     <span><span class="ci" id="hours">23</span> : <span class="ci" id="mins">59</span> : <span class="ci" id="secs">00</span></span>
-    <span class="pill">Desde $149 MXN/mes · 🎁 1 semana gratis</span>
+    <span class="pill">Desde $199 MXN/mes · +7 días incluidos 🎁</span>
   </div>
 
   <!-- NAV -->
@@ -700,6 +712,21 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
     </div>
   </section>
 
+
+  <!-- VECINOS WHATSAPP -->
+  <section class="vecinos-sec">
+    <div class="vecinos-inner">
+      <div class="vecinos-ico">🏘️</div>
+      <h2 class="vecinos-title">¿Eres vecino de <em>Tesistán</em>?</h2>
+      <p class="vecinos-sub">Únete al grupo de WhatsApp de la comunidad — descubre ofertas de negocios locales, promociones exclusivas y noticias de tu zona.</p>
+      <a class="vecinos-btn" href="https://wa.me/523320658076?text=Hola%2C%20quiero%20unirme%20al%20grupo%20vecinal%20de%20Tesistán%20Conecta%20🌽" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Unirme al grupo vecinal
+      </a>
+      <p class="vecinos-note">Gratis · Solo para vecinos de Tesistán · Te añadimos en minutos</p>
+    </div>
+  </section>
+
   <!-- DESCUENTOS & RED AFILIADOS -->
   <section class="desc-sec" id="descuentos">
     <div class="desc-inner">
@@ -757,12 +784,12 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
   <!-- PRICING -->
   <section class="pricing-sec sec-in" id="precios" style="padding:68px 20px">
     <div class="sec-label">Elige cómo quieres crecer</div>
-    <div class="sec-title" style="color:#fff;text-align:center;font-family:'Playfair Display',serif;font-size:clamp(1.75rem,4vw,2.5rem);margin-bottom:8px;font-weight:900">Marketing local que se paga solo</div>
+    <div class="sec-title" style="color:#fff;text-align:center;font-family:'Playfair Display',serif;font-size:clamp(1.75rem,4vw,2.5rem);margin-bottom:8px;font-weight:900">El plan correcto para crecer en Tesistán</div>
     <p class="sec-sub">Sin permanencia. Sin contratos. Cancelas cuando quieras.</p>
     <!-- Cortesía badge -->
     <div style="text-align:center;margin-bottom:36px">
       <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(240,180,41,0.12);border:1.5px solid rgba(240,180,41,0.35);color:#fde68a;font-weight:900;font-size:0.82rem;padding:9px 22px;border-radius:30px">
-        🎁 Primera semana gratis en todos los planes — compruébalo sin riesgo
+        🎁 Todos los planes incluyen +7 días de regalo — sin riesgo
       </span>
     </div>
     <div class="plans">
@@ -774,12 +801,13 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
         <div class="plan-price"><sup>$</sup>199</div>
         <div class="plan-oldprice"><s>$249</s></div>
         <div class="plan-per">al mes · MXN · sin contrato</div>
-        <div class="plan-freq">📣 6 publicaciones mensuales en grupos clave</div>
+        <div class="plan-freq">📍 Tu negocio visible en Tesistán desde hoy</div>
         <ul class="plan-feats">
-          <li><span class="ck">✓</span>Perfil verificado en el directorio Tesistán Conecta</li>
-          <li><span class="ck">✓</span>Publicaciones redactadas por nosotros, tú solo apruebas</li>
-          <li><span class="ck">✓</span>Botón directo de llamada y WhatsApp en tu perfil</li>
-          <li><span class="ck">✓</span>1 semana gratis para comprobar que funciona 🎁</li>
+          <li><span class="ck">✓</span>Perfil verificado con botón de llamada y WhatsApp</li>
+          <li><span class="ck">✓</span>8 apariciones mensuales frente a vecinos de Tesistán</li>
+          <li><span class="ck">✓</span>Nosotros escribimos y publicamos — tú recibes los clientes</li>
+          <li><span class="ck">✓</span>Sin contrato · Cancela cuando quieras</li>
+          <li><span class="ck">✓</span>+7 días de regalo para verlo funcionar 🎁</li>
         </ul>
         <a href="https://wa.me/523320658076?text=Quiero%20el%20Plan%20Presencia%20Local" class="plan-btn g">Empezar ahora →</a>
       </div>
@@ -792,33 +820,33 @@ footer a{color:#22c55e;text-decoration:none;margin:0 4px}
         <div class="plan-price"><sup>$</sup>379</div>
         <div class="plan-oldprice"><s>$449</s></div>
         <div class="plan-per">al mes · MXN · sin contrato</div>
-        <div class="plan-freq">📣 12 publicaciones estratégicas al mes</div>
+        <div class="plan-freq">🚀 Más clientes. Más llamadas. Cada semana.</div>
         <ul class="plan-feats">
-          <li><span class="ck">✓</span>Todo lo del plan Presencia</li>
-          <li><span class="ck">✓</span>Publicaciones en los 30+ grupos más activos de Tesistán</li>
-          <li><span class="ck">✓</span>Tu negocio priorizado en el directorio frente a tu competencia</li>
-          <li><span class="ck">✓</span>Una promoción especial al mes (nosotros la diseñamos)</li>
-          <li><span class="ck">✓</span>1 semana gratis para comprobar que funciona 🎁</li>
+          <li><span class="ck">✓</span>15 apariciones en los 30+ grupos más activos de Tesistán</li>
+          <li><span class="ck">✓</span>Tu negocio arriba de la competencia en el directorio</li>
+          <li><span class="ck">✓</span>1 promoción mensual diseñada por nosotros para llenar tu agenda</li>
+          <li><span class="ck">✓</span>Sin contrato · Cancela cuando quieras</li>
+          <li><span class="ck">✓</span>+7 días de regalo para verlo funcionar 🎁</li>
         </ul>
-        <a href="https://wa.me/523320658076?text=Quiero%20el%20Plan%20Crecimiento%20Local" class="plan-btn o">Quiero crecer de forma constante →</a>
+        <a href="https://wa.me/523320658076?text=Quiero%20el%20Plan%20Crecimiento%20Local" class="plan-btn o">Quiero más clientes cada semana →</a>
       </div>
 
       <!-- Plan 3: Dominio en Tesistán -->
       <div class="plan">
-        <div class="plan-lock">🔒 Un negocio por categoría — sin excepciones</div>
+        <div class="plan-lock">🔒 Solo 1 negocio por categoría</div>
         <div class="plan-name">Dominio Local</div>
         <div class="plan-price"><sup>$</sup>699</div>
         <div class="plan-oldprice"><s>$849</s></div>
         <div class="plan-per">al mes · MXN · sin contrato</div>
-        <div class="plan-freq">📣 20 publicaciones + video mensual + posición fija 🎥</div>
+        <div class="plan-freq">👑 Sé el negocio de referencia en tu categoría</div>
         <ul class="plan-feats">
-          <li><span class="ck">✓</span>Exclusividad de categoría: si tú lo tienes, no publicamos a tu competencia directa</li>
-          <li><span class="ck">✓</span>Posición fija en la parte superior del directorio en tu categoría</li>
-          <li><span class="ck">✓</span>Video promocional mensual para WhatsApp y Facebook</li>
-          <li><span class="ck">✓</span>Estrategia de contenido personalizada para tu negocio</li>
-          <li><span class="ck">✓</span>1 semana gratis para comprobar que funciona 🎁</li>
+          <li><span class="ck">✓</span>Exclusividad: no promovemos a tu competencia directa</li>
+          <li><span class="ck">✓</span>Posición #1 en el directorio dentro de tu categoría</li>
+          <li><span class="ck">✓</span>Video mensual para WhatsApp y Facebook — listo para compartir</li>
+          <li><span class="ck">✓</span>20 apariciones mensuales + estrategia personalizada</li>
+          <li><span class="ck">✓</span>+7 días de regalo para verlo funcionar 🎁</li>
         </ul>
-        <a href="https://wa.me/523320658076?text=Quiero%20el%20Plan%20Dominio%20en%20Tesistán" class="plan-btn g">Quiero ser el primero en mi categoría →</a>
+        <a href="https://wa.me/523320658076?text=Quiero%20el%20Plan%20Dominio%20en%20Tesistán" class="plan-btn g">Quiero ser el #1 en mi zona →</a>
       </div>
 
     </div>
